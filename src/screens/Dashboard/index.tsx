@@ -1,3 +1,4 @@
+import React from "React";
 import { StatusBar } from "react-native";
 import { useTheme } from "styled-components";
 
