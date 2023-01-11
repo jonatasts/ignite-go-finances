@@ -10,6 +10,7 @@ import {
   User,
   UserGreetting,
   UserName,
+  Icon,
 } from "./styles";
 
 export const Dashboard = () => {
@@ -32,6 +33,8 @@ export const Dashboard = () => {
               <UserName>Jonatas</UserName>
             </User>
           </UserInfo>
+
+          <Icon name={"power"} />
         </UserWrapper>
       </Header>
     </Container>
