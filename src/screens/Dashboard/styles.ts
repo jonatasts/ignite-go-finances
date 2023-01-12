@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons"
+import { getStatusBarHeight } from "react-native-iphone-x-helper";
+import { Platform } from "react-native";
 
 export const Container = styled.View`
   flex: 1;
@@ -14,7 +16,7 @@ export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.primary};
 
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
 `;
 
@@ -22,6 +24,7 @@ export const UserWrapper = styled.View`
   width: 100%;
 
   padding: 0 24px;
+  margin: ${Platform.OS === "ios" ? getStatusBarHeight() + RFValue(28) : RFValue(28)}px;
 
   flex-direction: row;
   justify-content: space-between;
@@ -34,8 +37,8 @@ export const UserInfo = styled.View`
 `;
 
 export const Photo = styled.Image`
-  width: ${RFValue(48)}px;
-  height: ${RFValue(48)}px;
+  width: ${RFValue(55)}px;
+  height: ${RFValue(55)}px;
 
   border-radius: 10px;
 `;
@@ -62,5 +65,15 @@ export const Icon = styled(Feather)`
   color: ${({ theme }) => theme.colors.secondary};
 
   font-size: ${RFValue(24)}px;
+`;
+
+export const HighlightCards = styled.ScrollView.attrs({
+  contentContainerStyle: { paddingLeft: 24 },
+  horizontal: true,
+  showsHorizontalScrollIndicator: false,
+})`
+  margin-top: ${RFPercentage(20)}px;
+  position: absolute;
+  width: 100%;
 `;
 
