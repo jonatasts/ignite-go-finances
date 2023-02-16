@@ -6,15 +6,15 @@ interface CategorySelectProps extends RectButtonProps {
   category: string;
 }
 
-export function CategorySelectButton({
+export const CategorySelectButton = ({
   activeOpacity,
   category,
   ...rest
-}: CategorySelectProps) {
+}: CategorySelectProps) => {
   return (
     <Container {...rest}>
       <Category>{category}</Category>
       <Icon name="chevron-down" />
     </Container>
   );
-}
+};
