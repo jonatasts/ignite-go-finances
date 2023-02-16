@@ -45,7 +45,7 @@ export const Dashboard = () => {
       name: "Hamburgueria Pizzy",
       amount: "R$ 59,00",
       category: { name: "Alimentação", icon: "coffee" },
-      date: "13/04/2020",
+      date: "12/04/2020",
     },
     {
       id: "3",
@@ -53,7 +53,23 @@ export const Dashboard = () => {
       name: "Aluguel do apartamento",
       amount: "R$ 1.200,00",
       category: { name: "Casa", icon: "shopping-bag" },
-      date: "13/04/2020",
+      date: "12/04/2020",
+    },
+    {
+      id: "4",
+      type: "positive",
+      name: "Devolução de terceiros",
+      amount: "R$ 1.000,00",
+      category: { name: "Pagamentos", icon: "dollar-sign" },
+      date: "11/04/2020",
+    },
+    {
+      id: "5",
+      type: "negative",
+      name: "Internet",
+      amount: "R$ 100,00",
+      category: { name: "Internet", icon: "wifi" },
+      date: "10/04/2020",
     },
   ];
 
