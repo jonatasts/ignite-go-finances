@@ -1,27 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../../components/Forms/Button";
 import { Input } from "../../components/Forms/Input";
+import { TransactionButton } from "../../components/Forms/TransactionButton";
+
 import {
   Container,
   Title,
   Header,
-  // Form,
-  // Fields,
-  // TransactionsTypes
+  Form,
+  Fields,
+  TransactionsContainer,
 } from "./styles";
 
 export const Register = () => {
+  const [transactionType, setTransactionType] = useState<string>("");
+
   return (
     <Container>
       <Header>
         <Title>Cadastro</Title>
       </Header>
 
-      <Input placeholder="Nome" />
+      <Form>
+        <Fields>
+          <Input placeholder="Nome" />
 
-      <Input placeholder="Preço" />
+          <Input placeholder="Preço" />
 
-      <Button title="Enviar" onPress={() => {}} />
+          <TransactionsContainer>
+            <TransactionButton
+              title="Income"
+              isActive={transactionType === 'positive'}
+              type={"up"}
+              onPress={() => setTransactionType("positive")}
+            />
+
+            <TransactionButton
+              title="Income"
+              isActive={transactionType === 'negative'}
+              type={"down"}
+              onPress={() => setTransactionType("negative")}
+            />
+          </TransactionsContainer>
+        </Fields>
+
+        <Button title="Enviar" onPress={() => {}} />
+      </Form>
     </Container>
   );
 };
