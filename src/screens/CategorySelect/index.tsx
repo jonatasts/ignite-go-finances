@@ -16,9 +16,11 @@ import { Button } from "../../components/Forms/Button";
 
 import { categories } from "../../utils/categories";
 
-interface Category {
+export interface Category {
   key: string;
   name: string;
+  icon: string;
+  color: string;
 }
 
 interface CategorySelectProps {
@@ -46,7 +48,7 @@ export const CategorySelect = ({
             isActive={category.key === item.key}
             onPress={() => setCategory(item)}
           >
-            <Icon name={item.icon} />
+            <Icon name={item.icon} color={item.color} />
             <Name>{item.name}</Name>
           </Category>
         )}

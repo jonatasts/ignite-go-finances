@@ -23,6 +23,8 @@ export const Register = () => {
   const [category, setCategory] = useState({
     key: "category",
     name: "Categoria",
+    icon: "",
+    color: ""
   });
 
   return (
@@ -54,7 +56,7 @@ export const Register = () => {
           </TransactionsContainer>
 
           <CategorySelectButton
-            category={"Categoria"}
+            category={category}
             onPress={() => setCategoryModalOpen(true)}
           />
         </Fields>

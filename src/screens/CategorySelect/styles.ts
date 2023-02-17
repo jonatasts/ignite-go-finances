@@ -8,6 +8,10 @@ interface CategoryProps {
   isActive: boolean;
 }
 
+interface iconProps {
+  color: string;
+}
+
 export const Container = styled(GestureHandlerRootView)`
   background-color: ${({ theme }) => theme.colors.background};
   flex: 1;
@@ -35,9 +39,10 @@ export const Category = styled.TouchableOpacity<CategoryProps>`
   padding: ${RFValue(15)}px;
 `;
 
-export const Icon = styled(Feather)`
+export const Icon = styled(Feather)<iconProps>`
   font-size: ${RFValue(20)}px;
   margin-right: ${RFValue(16)}px;
+  color: ${({ theme, color }) => (color ? color : theme.colors.secondary)};
 `;
 
 export const Name = styled.Text`

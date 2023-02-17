@@ -1,9 +1,16 @@
 import React from "react";
 import { RectButtonProps } from "react-native-gesture-handler";
-import { Container, Category, Icon } from "./styles";
+import { Category as CategoryType } from "../../../screens/CategorySelect";
+import {
+  Container,
+  Category,
+  Icon,
+  IconCategory,
+  CategoryText,
+} from "./styles";
 
 interface CategorySelectProps extends RectButtonProps {
-  category: string;
+  category: CategoryType;
 }
 
 export const CategorySelectButton = ({
@@ -13,7 +20,11 @@ export const CategorySelectButton = ({
 }: CategorySelectProps) => {
   return (
     <Container {...rest}>
-      <Category>{category}</Category>
+      <Category>
+        {category.key !== "category" && <IconCategory name={category.icon} color={category.color}/>}
+
+        <CategoryText>{category.name}</CategoryText>
+      </Category>
       <Icon name="chevron-down" />
     </Container>
   );
