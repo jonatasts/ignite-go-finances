@@ -7,7 +7,7 @@ interface Props extends TouchableOpacityProps {
   onPress: () => void;
 }
 
-export const Button = ({ title, ...rest }: Props) => {
+export const Button = ({ title, activeOpacity, ...rest }: Props) => {
   return (
     <Container {...rest}>
       <Title>{title}</Title>

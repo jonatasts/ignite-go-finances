@@ -55,7 +55,11 @@ export const CategorySelect = ({
       />
 
       <Footer>
-        <Button onPress={closeSelectCategory} title="Selecionar" />
+        <Button
+          disabled={category.key === "category"}
+          onPress={closeSelectCategory}
+          title="Selecionar"
+        />
       </Footer>
     </Container>
   );
