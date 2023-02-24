@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Modal } from "react-native";
+import { useForm } from "react-hook-form";
 
 import { CategorySelect } from "../CategorySelect";
 
 import { Button } from "../../components/Forms/Button";
 import { CategorySelectButton } from "../../components/Forms/CategorySelectButton";
-import { Input } from "../../components/Forms/Input";
 import { TransactionButton } from "../../components/Forms/TransactionButton";
+import { InputForm } from "../../components/Forms/InputForm";
 
 import {
   Container,
@@ -17,6 +18,11 @@ import {
   TransactionsContainer,
 } from "./styles";
 
+interface FormData {
+  name: string;
+  amount: string;
+}
+
 export const Register = () => {
   const [transactionType, setTransactionType] = useState<string>("");
   const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
@@ -24,8 +30,21 @@ export const Register = () => {
     key: "category",
     name: "Categoria",
     icon: "",
-    color: ""
+    color: "",
   });
+
+  const { control, handleSubmit } = useForm();
+
+  const handleRegister = async (form: Partial<FormData>) => {
+    const data = {
+      name: form.name,
+      amount: form.amount,
+      transactionType,
+      category: category.key,
+    };
+
+    console.log(data);
+  };
 
   return (
     <Container>
@@ -35,9 +54,24 @@ export const Register = () => {
 
       <Form>
         <Fields>
-          <Input placeholder="Nome" />
+          <InputForm
+            autoCapitalize="sentences"
+            autoCorrect={false}
+            control={control}
+            // error={errors.name && errors.name.message}
+            error={""}
+            name="name"
+            placeholder="Nome"
+          />
 
-          <Input placeholder="Preço" />
+          <InputForm
+            // error={errors.amount && errors.amount.message}
+            error={""}
+            control={control}
+            keyboardType="numeric"
+            name="amount"
+            placeholder="Valor"
+          />
 
           <TransactionsContainer>
             <TransactionButton
@@ -61,7 +95,7 @@ export const Register = () => {
           />
         </Fields>
 
-        <Button title="Enviar" onPress={() => {}} />
+        <Button onPress={handleSubmit(handleRegister)} title="Enviar" />
       </Form>
 
       <Modal animationType="slide" visible={categoryModalOpen}>
