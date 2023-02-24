@@ -1,9 +1,15 @@
-import styled from "styled-components/native";
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { Feather } from "@expo/vector-icons"
-import { getBottomSpace, getStatusBarHeight } from "react-native-iphone-x-helper";
 import { FlatList, FlatListProps, Platform } from "react-native";
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { BorderlessButton, BorderlessButtonProps } from "react-native-gesture-handler";
+import { getBottomSpace, getStatusBarHeight } from "react-native-iphone-x-helper";
+import { Feather } from "@expo/vector-icons"
+import styled from "styled-components/native";
+
 import { DataListProps } from ".";
+
+interface ButtonProps extends BorderlessButtonProps {
+  children: React.ReactNode;
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -94,5 +100,7 @@ export const TransactionsList = styled(FlatList as new (props: FlatListProps<Dat
   showsVerticalScrollIndicator: false,
   contentContainerStyle: { paddingBottom: Platform.OS === "ios" ? getBottomSpace() : 0 },
 })``;
+
+export const LogoutButton = styled(BorderlessButton)<ButtonProps>``;
 
 

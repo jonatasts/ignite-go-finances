@@ -7,9 +7,7 @@ interface iconProps {
   color?: string;
 }
 
-export const Container = styled(RectButton).attrs({
-  activeOpacity: 0.7,
-})`
+export const Container = styled(RectButton)`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.shape};
   border-radius: 5px;
