@@ -118,7 +118,7 @@ export const Register = () => {
             />
           </Fields>
 
-          <Button onPress={handleSubmit(handleRegister)} title="Enviar" />
+          <Button onPress={handleSubmit(handleRegister)} title="Salvar" />
         </Form>
 
         <Modal animationType="slide" visible={categoryModalOpen}>
