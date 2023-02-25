@@ -1,5 +1,5 @@
 import React from "react";
-import { RectButtonProps } from "react-native-gesture-handler";
+import { TouchableOpacityProps } from "react-native";
 import { Category as CategoryType } from "../../../screens/CategorySelect";
 import {
   Container,
@@ -9,7 +9,7 @@ import {
   CategoryText,
 } from "./styles";
 
-interface CategorySelectProps extends RectButtonProps {
+interface CategorySelectProps extends TouchableOpacityProps {
   category: CategoryType;
 }
 

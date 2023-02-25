@@ -1,26 +1,36 @@
 import styled, { css } from "styled-components/native";
-import { RectButton } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 
 interface TransactionProps {
-  type: 'up' | 'down';
+  type: "up" | "down";
   isActive: boolean;
-}''
+}
+("");
 
 export const Container = styled.View<TransactionProps>`
-  border: ${({ isActive }) => isActive ? 0 : 1.5}px solid ${({ theme }) => theme.colors.text};
+  border: ${({ isActive }) => (isActive ? 0 : 1.5)}px solid
+    ${({ theme }) => theme.colors.text};
   border-radius: 5px;
   width: 48%;
-  ${({ isActive, type}) => isActive && type === 'up' && css`
-    background-color: ${({ theme }) => theme.colors.success_light};
-  `}
-  ${({ isActive, type}) => isActive && type === 'down' && css`
-    background-color: ${({ theme }) => theme.colors.attention_light};
-  `}
+  ${({ isActive, type }) =>
+    isActive &&
+    type === "up" &&
+    css`
+      background-color: ${({ theme }) => theme.colors.success_light};
+    `}
+  ${({ isActive, type }) =>
+    isActive &&
+    type === "down" &&
+    css`
+      background-color: ${({ theme }) => theme.colors.attention_light};
+    `}
 `;
 
-export const Button = styled(RectButton)`
+export const Button = styled(TouchableOpacity).attrs({
+  activeOpacity: 0.8,
+})`
   align-items: center;
   flex-direction: row;
   justify-content: center;
@@ -28,7 +38,8 @@ export const Button = styled(RectButton)`
 `;
 
 export const Icon = styled(Feather)<TransactionProps>`
-  color: ${({ theme, type }) => type === 'up' ? theme.colors.success : theme.colors.attention};
+  color: ${({ theme, type }) =>
+    type === "up" ? theme.colors.success : theme.colors.attention};
   font-size: ${RFValue(24)}px;
   margin-right: 12px;
 `;
