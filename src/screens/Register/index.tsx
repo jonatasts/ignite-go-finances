@@ -24,6 +24,7 @@ import {
   Fields,
   TransactionsContainer,
 } from "./styles";
+import { Masks } from "react-native-mask-input";
 
 interface NavigationProps {
   navigate: (screen: string) => void;
@@ -36,10 +37,7 @@ interface FormData {
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Nome é obrigatório"),
-  amount: Yup.number()
-    .typeError("Informe um valor númerico")
-    .positive("O valor não pode ser negativo")
-    .required("O valor é obrigatório"),
+  amount: Yup.string().required("O valor é obrigatório"),
 });
 
 export const Register = () => {
@@ -117,7 +115,8 @@ export const Register = () => {
               control={control}
               keyboardType="numeric"
               name="amount"
-              placeholder="Valor"
+              placeholder="R$ "
+              mask={Masks.BRL_CURRENCY}
             />
 
             <TransactionsContainer>
