@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
+import { useNavigation } from "@react-navigation/native";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+
 import * as Yup from "yup";
 
 import { CategorySelect } from "../CategorySelect";
@@ -20,6 +25,10 @@ import {
   TransactionsContainer,
 } from "./styles";
 
+interface NavigationProps {
+  navigate: (screen: string) => void;
+}
+
 interface FormData {
   name: string;
   amount: string;
@@ -34,8 +43,10 @@ const schema = Yup.object().shape({
 });
 
 export const Register = () => {
+  const navigation = useNavigation<NavigationProps>();
   const [transactionType, setTransactionType] = useState<string>("");
   const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+  const collectionKey = `@gofinances:transactions`;
   const [category, setCategory] = useState({
     key: "category",
     name: "Categoria",
@@ -60,14 +71,27 @@ export const Register = () => {
       return Alert.alert("Selecione alguma categoria");
     }
 
-    const data = {
+    const newTransaction = {
+      id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
-      category: category.key,
+      type: transactionType,
+      category: category,
+      date: new Date().toISOString(),
     };
 
-    console.log(data);
+    try {
+      const storageData = await AsyncStorage.getItem(collectionKey);
+      const currentData = storageData ? JSON.parse(storageData) : [];
+      const formattedData = [...currentData, newTransaction];
+      await AsyncStorage.setItem(collectionKey, JSON.stringify(formattedData));
+      setTransactionType("");
+      setCategory({ key: "category", name: "Categoria", icon: "", color: "" });
+      reset();
+      navigation.navigate("Listagem");
+    } catch (error) {
+      Alert.alert("Não foi possível salvar");
+    }
   };
 
   return (
