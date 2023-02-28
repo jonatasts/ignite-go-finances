@@ -1,3 +1,6 @@
+import "moment-timezone";
+import "moment/locale/pt-br";
+
 import React from "react";
 import { ThemeProvider } from "styled-components/native";
 import {

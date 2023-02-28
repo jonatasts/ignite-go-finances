@@ -1,5 +1,8 @@
-import React from "react";
-import { StatusBar } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { Alert, StatusBar } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import Moment from "moment";
 import { useTheme } from "styled-components";
 
 import { HighlightCard } from "../../components/HighlightCard";
@@ -31,48 +34,64 @@ export interface DataListProps extends TransactionCardDataProps {
 
 export const Dashboard = () => {
   const theme = useTheme();
-  const data: DataListProps[] = [
-    {
-      id: "1",
-      type: "positive",
-      name: "Desenvolvimento de site",
-      amount: "R$ 12.000,00",
-      category: { name: "Vendas", icon: "dollar-sign" },
-      date: "13/04/2020",
-    },
-    {
-      id: "2",
-      type: "negative",
-      name: "Hamburgueria Pizzy",
-      amount: "R$ 59,00",
-      category: { name: "Alimentação", icon: "coffee" },
-      date: "12/04/2020",
-    },
-    {
-      id: "3",
-      type: "negative",
-      name: "Aluguel do apartamento",
-      amount: "R$ 1.200,00",
-      category: { name: "Casa", icon: "shopping-bag" },
-      date: "12/04/2020",
-    },
-    {
-      id: "4",
-      type: "positive",
-      name: "Devolução de terceiros",
-      amount: "R$ 1.000,00",
-      category: { name: "Pagamentos", icon: "dollar-sign" },
-      date: "11/04/2020",
-    },
-    {
-      id: "5",
-      type: "negative",
-      name: "Internet",
-      amount: "R$ 100,00",
-      category: { name: "Internet", icon: "wifi" },
-      date: "10/04/2020",
-    },
-  ];
+  const [transactions, setTransactions] = useState<DataListProps[]>([]);
+  const collectionKey = `@gofinances:transactions`;
+
+  const loadTransactions = async () => {
+    let entriesSum = 0;
+    let expensivesSum = 0;
+
+    try {
+      const transactions = await AsyncStorage.getItem(collectionKey);
+      const parsedTransactions = transactions ? JSON.parse(transactions) : [];
+
+      const formattedTransactions: DataListProps[] = parsedTransactions.map(
+        (item: DataListProps) => {
+          if (item.type === "positive") {
+            entriesSum += Number(item.amount);
+          } else {
+            expensivesSum += Number(item.amount);
+          }
+
+          const amount = item.amount;
+
+          Moment.locale("pt-br");
+          const format = "DD MMM YYYY";
+          const timezone = "America/Bahia";
+          const date = Moment(item.date);
+          const dateFormated = date
+            .tz(timezone)
+            .format(format)
+            .toLocaleUpperCase();
+
+          return {
+            id: item.id,
+            name: item.name,
+            amount,
+            date: dateFormated,
+            type: item.type,
+            category: item.category,
+          };
+        }
+      );
+
+      setTransactions(formattedTransactions);
+    } catch (error) {
+      console.log(error);
+
+      Alert.alert("Erro ao carregar as transações");
+    }
+  };
+
+  useEffect(() => {
+    loadTransactions();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadTransactions();
+    }, [])
+  );
 
   return (
     <Container>
