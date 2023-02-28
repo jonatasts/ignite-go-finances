@@ -74,7 +74,7 @@ export const Register = () => {
       name: form.name,
       amount: form.amount,
       type: transactionType,
-      category: category,
+      category: category.key,
       date: new Date().toISOString(),
     };
 
