@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Alert, StatusBar } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Moment from "moment";
+import moment from "moment";
 import { useTheme } from "styled-components";
 import { formatCurrency } from "react-native-format-currency";
 
@@ -60,24 +60,17 @@ const getLastTransactionDate = (
     Math.max.apply(
       Math,
       transactionFilttered.map((item) =>
-        Moment(item.date, "DD MMM YYYY").toDate().getTime()
+        moment(item.date, "DD MMM YYYY").toDate().getTime()
       )
     )
   );
 
-  const format = "MMMM";
-  const timezone = "America/Bahia";
-  const date = Moment(lastTransaction);
-  const dateFormated = date.tz(timezone).format(format);
+  let day = lastTransaction.getDate().toString();
+  day = day.length === 1 ? "0" + day : day;
 
-  return `${lastTransaction.getDate()} de ${dateFormated}`;
-};
-
-const removeFormattedValue = (value: string) => {
-  let amountFormatted = value.substring(3).replace(".", "");
-  amountFormatted = amountFormatted.replace(",", ".");
-
-  return amountFormatted;
+  return `${day} de ${lastTransaction.toLocaleString("pt-Br", {
+    month: "long",
+  })}`;
 };
 
 export const Dashboard = () => {
@@ -97,15 +90,22 @@ export const Dashboard = () => {
       const formattedTransactions: DataListProps[] = parsedTransactions.map(
         (item: DataListProps) => {
           if (item.type === "positive") {
-            entriesSum += Number(removeFormattedValue(item.amount));
+            entriesSum += Number(item.amount);
           } else {
-            expensivesSum += Number(removeFormattedValue(item.amount));
+            expensivesSum += Number(item.amount);
           }
-          const amount = item.amount;
 
-          const format = "DD MMM YYYY";
+          const amount = Number(item.amount).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          });
+
+          const format =
+            moment(item.date).year() === moment().year()
+              ? "DD MMM"
+              : "DD MMM YYYY";
           const timezone = "America/Bahia";
-          const date = Moment(item.date);
+          const date = moment(item.date);
           const dateFormated = date
             .tz(timezone)
             .format(format)
@@ -122,8 +122,6 @@ export const Dashboard = () => {
         }
       );
 
-      const totalSum = entriesSum - expensivesSum;
-
       const lastTransactionsEntries = getLastTransactionDate(
         formattedTransactions,
         "positive"
@@ -134,76 +132,51 @@ export const Dashboard = () => {
         "negative"
       );
 
-      //TODO: Refatorar o intervalo
-      const totalInterval =
+      const totalSum = entriesSum - expensivesSum;
+
+      const entriesLastTransactionDescription =
+        lastTransactionsEntries === false
+          ? "Não há transações"
+          : `Ultima entrada em ${lastTransactionsEntries}`;
+
+      const expensivesLastTransactionDescription =
         lastTransactionsExpensives === false
           ? "Não há transações"
-          : `01 a ${lastTransactionsExpensives}`;
+          : `Ultima saída em ${lastTransactionsExpensives}`;
 
-      let [entriesSumWithSymbol] = formatCurrency({
-        amount: entriesSum,
-        code: "BRL",
-      });
-
-      entriesSumWithSymbol =
-        entriesSumWithSymbol.indexOf(",") !== -1 &&
-        entriesSumWithSymbol.split(",")[1].length === 1
-          ? `${entriesSumWithSymbol}0`
-          : entriesSumWithSymbol;
-
-      let [expensivesSumWithSymbol] = formatCurrency({
-        amount: expensivesSum,
-        code: "BRL",
-      });
-
-      expensivesSumWithSymbol =
-        expensivesSumWithSymbol.indexOf(",") !== -1 &&
-        expensivesSumWithSymbol.split(",")[1].length === 1
-          ? `${expensivesSumWithSymbol}0`
-          : expensivesSumWithSymbol;
-
-      let [totalSumWithSymbol] = formatCurrency({
-        amount: totalSum,
-        code: "BRL",
-      });
-
-      totalSumWithSymbol =
-        totalSumWithSymbol.indexOf(",") !== -1 &&
-        totalSumWithSymbol.split(",")[1].length === 1
-          ? `${totalSumWithSymbol}0`
-          : totalSumWithSymbol;
+      const totalLastTransactionDescription =
+        lastTransactionsExpensives === false
+          ? "Não há despesas registradas"
+          : lastTransactionsExpensives.indexOf("01") === -1
+          ? `01 a ${lastTransactionsExpensives}`
+          : lastTransactionsExpensives;
 
       setHighlightData({
         entries: {
-          amount:
-            entriesSumWithSymbol.indexOf(",") !== -1
-              ? entriesSumWithSymbol
-              : `${entriesSumWithSymbol},00`,
-          lastTransaction:
-            lastTransactionsEntries === false
-              ? "Não há transações"
-              : `Ultima entrada dia ${lastTransactionsEntries}`,
+          amount: entriesSum.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }),
+          lastTransaction: entriesLastTransactionDescription,
         },
         expensives: {
-          amount:
-            expensivesSumWithSymbol.indexOf(",") !== -1
-              ? expensivesSumWithSymbol
-              : `${expensivesSumWithSymbol},00`,
-          lastTransaction:
-            lastTransactionsExpensives === false
-              ? "Não há transações"
-              : `Ultima saída dia ${lastTransactionsExpensives}`,
+          amount: expensivesSum.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }),
+          lastTransaction: expensivesLastTransactionDescription,
         },
         total: {
-          amount:
-            totalSumWithSymbol.indexOf(",") !== -1
-              ? totalSumWithSymbol
-              : `${totalSumWithSymbol},00`,
-          lastTransaction: totalInterval,
+          amount: totalSum.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }),
+          lastTransaction: totalLastTransactionDescription,
         },
       });
 
-      setTransactions(formattedTransactions);
+      //TODO: Botão para alterar a ordem de exibição das transações
+      setTransactions(formattedTransactions.reverse());
     } catch (error) {
       console.log(error);
 
@@ -244,30 +217,24 @@ export const Dashboard = () => {
       <HighlightCards>
         {highlightData && (
           <HighlightCard
-            // amount={""}
             amount={highlightData.entries.amount}
             type="up"
-            // lastTransaction={""}
             lastTransaction={highlightData.entries.lastTransaction}
             title="Entradas"
           />
         )}
         {highlightData && (
           <HighlightCard
-            // amount={""}
             amount={highlightData.expensives.amount}
             type="down"
-            // lastTransaction={""}
             lastTransaction={highlightData.expensives.lastTransaction}
             title="Saídas"
           />
         )}
         {highlightData && (
           <HighlightCard
-            // amount={""}
             amount={highlightData.total.amount}
             type="total"
-            // lastTransaction={""}
             lastTransaction={highlightData.total.lastTransaction}
             title="Total"
           />

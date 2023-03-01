@@ -40,6 +40,17 @@ const schema = Yup.object().shape({
   amount: Yup.string().required("O valor é obrigatório"),
 });
 
+const removeFormattedValue = (value: string | undefined) => {
+  let amountFormatted: string | undefined;
+
+  if (value) {
+    amountFormatted = value.substring(3).replace(".", "");
+    amountFormatted = amountFormatted.replace(",", ".");
+  }
+
+  return amountFormatted;
+};
+
 export const Register = () => {
   const navigation = useNavigation<NavigationProps>();
   const [transactionType, setTransactionType] = useState<string>("");
@@ -72,7 +83,7 @@ export const Register = () => {
     const newTransaction = {
       id: String(uuid.v4()),
       name: form.name,
-      amount: form.amount,
+      amount: removeFormattedValue(form.amount),
       type: transactionType,
       category: category.key,
       date: new Date().toISOString(),

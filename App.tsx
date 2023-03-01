@@ -14,7 +14,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
-import Moment from "moment";
+import moment from "moment";
 
 import theme from "./src/global/styles/theme";
 
@@ -27,7 +27,7 @@ export default function App() {
     Poppins_700Bold,
   });
 
-  Moment.locale("pt-br");
+  moment.locale("pt-br");
 
   if (!fontsLoaded) {
     return <></>;
