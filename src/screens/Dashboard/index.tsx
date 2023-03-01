@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import { useTheme } from "styled-components";
-import { formatCurrency } from "react-native-format-currency";
 
 import { HighlightCard } from "../../components/HighlightCard";
 import {
@@ -27,6 +26,7 @@ import {
   Title,
   TransactionsList,
   LogoutButton,
+  LoadingContainer,
 } from "./styles";
 
 interface HighlightCardDataProps {
@@ -75,10 +75,12 @@ const getLastTransactionDate = (
 
 export const Dashboard = () => {
   const theme = useTheme();
-  const [transactions, setTransactions] = useState<DataListProps[]>([]);
-  const [highlightData, setHighlightData] = useState<HighlightCardDataProps>();
   const collectionKey = `@gofinances:transactions`;
-
+  const [transactions, setTransactions] = useState<DataListProps[]>([]);
+  const [highlightData, setHighlightData] = useState<HighlightCardDataProps>(
+    {} as HighlightCardDataProps
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const loadTransactions = async () => {
     let entriesSum = 0;
     let expensivesSum = 0;
@@ -177,6 +179,7 @@ export const Dashboard = () => {
 
       //TODO: Botão para alterar a ordem de exibição das transações
       setTransactions(formattedTransactions.reverse());
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
 
@@ -194,61 +197,63 @@ export const Dashboard = () => {
     <Container>
       <StatusBar backgroundColor={theme.colors.primary} />
 
-      <Header>
-        <UserWrapper>
-          <UserInfo>
-            <Photo
-              source={{
-                uri: "https://avatars.githubusercontent.com/u/49213782?v=4",
-              }}
+      {isLoading ? (
+        <LoadingContainer>
+          <ActivityIndicator color={theme.colors.primary} size="large" />
+        </LoadingContainer>
+      ) : (
+        <>
+          <Header>
+            <UserWrapper>
+              <UserInfo>
+                <Photo
+                  source={{
+                    uri: "https://avatars.githubusercontent.com/u/49213782?v=4",
+                  }}
+                />
+                <User>
+                  <UserGreetting> Olá, </UserGreetting>
+                  <UserName>Jonatas</UserName>
+                </User>
+              </UserInfo>
+
+              <LogoutButton onPress={() => {}}>
+                <Icon name="power" />
+              </LogoutButton>
+            </UserWrapper>
+          </Header>
+
+          <HighlightCards>
+            <HighlightCard
+              amount={highlightData.entries.amount}
+              type="up"
+              lastTransaction={highlightData.entries.lastTransaction}
+              title="Entradas"
             />
-            <User>
-              <UserGreetting> Olá, </UserGreetting>
-              <UserName>Jonatas</UserName>
-            </User>
-          </UserInfo>
+            <HighlightCard
+              amount={highlightData.expensives.amount}
+              type="down"
+              lastTransaction={highlightData.expensives.lastTransaction}
+              title="Saídas"
+            />
+            <HighlightCard
+              amount={highlightData.total.amount}
+              type="total"
+              lastTransaction={highlightData.total.lastTransaction}
+              title="Total"
+            />
+          </HighlightCards>
 
-          <LogoutButton onPress={() => {}}>
-            <Icon name="power" />
-          </LogoutButton>
-        </UserWrapper>
-      </Header>
-
-      <HighlightCards>
-        {highlightData && (
-          <HighlightCard
-            amount={highlightData.entries.amount}
-            type="up"
-            lastTransaction={highlightData.entries.lastTransaction}
-            title="Entradas"
-          />
-        )}
-        {highlightData && (
-          <HighlightCard
-            amount={highlightData.expensives.amount}
-            type="down"
-            lastTransaction={highlightData.expensives.lastTransaction}
-            title="Saídas"
-          />
-        )}
-        {highlightData && (
-          <HighlightCard
-            amount={highlightData.total.amount}
-            type="total"
-            lastTransaction={highlightData.total.lastTransaction}
-            title="Total"
-          />
-        )}
-      </HighlightCards>
-
-      <Transactions>
-        <Title>Listagem</Title>
-        <TransactionsList
-          data={transactions}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <TransactionCard data={item} />}
-        />
-      </Transactions>
+          <Transactions>
+            <Title>Listagem</Title>
+            <TransactionsList
+              data={transactions}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <TransactionCard data={item} />}
+            />
+          </Transactions>
+        </>
+      )}
     </Container>
   );
 };
