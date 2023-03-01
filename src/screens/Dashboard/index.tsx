@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Alert, StatusBar } from "react-native";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, Alert, StatusBar } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
