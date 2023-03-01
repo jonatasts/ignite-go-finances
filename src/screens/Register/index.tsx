@@ -132,14 +132,14 @@ export const Register = () => {
 
             <TransactionsContainer>
               <TransactionButton
-                title="Income"
+                title="Entrada"
                 isActive={transactionType === "positive"}
                 type={"up"}
                 onPress={() => setTransactionType("positive")}
               />
 
               <TransactionButton
-                title="Income"
+                title="Saída"
                 isActive={transactionType === "negative"}
                 type={"down"}
                 onPress={() => setTransactionType("negative")}
