@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -10,7 +11,7 @@ export const Container = styled(GestureHandlerRootView)`
 export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.primary};
   width: 100%;
-  height: ${RFValue(113)}px;
+  height: ${Platform.OS === "ios" ? RFValue(113) : RFValue(100)}px;
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 19px;
