@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 export const Button = styled(TouchableOpacity).attrs({
-  activeOpacity: 0.8,
+  activeOpacity: 0.9,
 })`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.shape};
