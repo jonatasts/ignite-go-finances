@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler';
+
 import "moment-timezone";
 import "moment/locale/pt-br";
 
