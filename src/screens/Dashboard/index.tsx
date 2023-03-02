@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, Alert, StatusBar } from "react-native";
+import { ActivityIndicator, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
@@ -195,8 +195,6 @@ export const Dashboard = () => {
 
   return (
     <Container>
-      <StatusBar backgroundColor={theme.colors.primary} />
-
       {isLoading ? (
         <LoadingContainer>
           <ActivityIndicator color={theme.colors.primary} size="large" />
