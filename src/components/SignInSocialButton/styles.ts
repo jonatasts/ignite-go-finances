@@ -6,7 +6,8 @@ export const Button = styled(TouchableOpacity).attrs({
   activeOpacity: 0.9,
 })`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.shape};
+  background-color: ${({ theme, disabled }) =>
+    disabled ?  theme.colors.disabled : theme.colors.shape};
   border-radius: 5px;
   flex-direction: row;
   height: ${RFValue(56)}px;
