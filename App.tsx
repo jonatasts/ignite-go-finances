@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 
 import "moment-timezone";
 import "moment/locale/pt-br";
@@ -23,6 +23,8 @@ import theme from "./src/global/styles/theme";
 
 import { AppRoutes } from "./src/routes/app.routes";
 
+import { AuthContextProvider } from "./src/contexts/AuthContext";
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -41,8 +43,9 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <NavigationContainer>
           <StatusBar backgroundColor={theme.colors.primary} />
-
-          <AppRoutes />
+          <AuthContextProvider>
+            <AppRoutes />
+          </AuthContextProvider>
         </NavigationContainer>
       </ThemeProvider>
     </GestureHandlerRootView>
