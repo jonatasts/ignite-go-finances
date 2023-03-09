@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -28,6 +28,8 @@ import {
   LogoutButton,
   LoadingContainer,
 } from "./styles";
+
+import { useAuthContext } from "../../contexts/AuthContext";
 
 interface HighlightCardDataProps {
   entries: HightlightCardData;
@@ -74,8 +76,9 @@ const getLastTransactionDate = (
 };
 
 export const Dashboard = () => {
+  const { signOut, user } = useAuthContext();
   const theme = useTheme();
-  const collectionKey = `@gofinances:transactions`;
+  const collectionKey = `@gofinances:transactions_user:${user.id}`;
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightCardDataProps>(
     {} as HighlightCardDataProps
@@ -193,6 +196,10 @@ export const Dashboard = () => {
     }, [])
   );
 
+  // useEffect(() => {
+  //     AsyncStorage.removeItem(collectionKey);
+  // }, []);
+
   return (
     <Container>
       {isLoading ? (
@@ -206,16 +213,16 @@ export const Dashboard = () => {
               <UserInfo>
                 <Photo
                   source={{
-                    uri: "https://avatars.githubusercontent.com/u/49213782?v=4",
+                    uri: user.photo,
                   }}
                 />
                 <User>
                   <UserGreetting> Olá, </UserGreetting>
-                  <UserName>Jonatas</UserName>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
 
-              <LogoutButton onPress={() => {}}>
+              <LogoutButton onPress={signOut}>
                 <Icon name="power" />
               </LogoutButton>
             </UserWrapper>

@@ -26,6 +26,8 @@ import {
   LoadingContainer,
 } from "./styles";
 
+import { useAuthContext } from "../../contexts/AuthContext";
+
 interface TotalByCategory {
   key: string;
   name: string;
@@ -45,12 +47,13 @@ interface TransactionData {
 
 export const Resume = () => {
   const theme = useTheme();
+  const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<TotalByCategory[]>(
     []
   );
-  const collectionKey = `@gofinances:transactions`;
+  const collectionKey = `@gofinances:transactions_user:${user.id}`;
 
   function handleDateChange(action: "next" | "prev") {
     action === "next"

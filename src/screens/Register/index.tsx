@@ -26,6 +26,8 @@ import {
 } from "./styles";
 import { Masks } from "react-native-mask-input";
 
+import { useAuthContext } from "../../contexts/AuthContext";
+
 interface NavigationProps {
   navigate: (screen: string) => void;
 }
@@ -52,10 +54,11 @@ const removeFormattedValue = (value: string | undefined) => {
 };
 
 export const Register = () => {
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation<NavigationProps & any>();
+  const { user } = useAuthContext();
   const [transactionType, setTransactionType] = useState<string>("");
   const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
-  const collectionKey = `@gofinances:transactions`;
+  const collectionKey = `@gofinances:transactions_user:${user.id}`;
   const [category, setCategory] = useState({
     key: "category",
     name: "Categoria",
