@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import * as AuthSession from "expo-auth-session";
+import * as AppleAuthentication from "expo-apple-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface AuthProviderProps {
@@ -23,6 +24,8 @@ interface User {
 interface AuthContextProps {
   user: User;
   signInWithGoogle: () => Promise<void>;
+  signInWithApple: () => Promise<void>;
+  signOut: () => Promise<void>;
   isUserStorageLoading: boolean;
 }
 
@@ -47,6 +50,32 @@ function AuthContextProvider({ children }: AuthProviderProps) {
     }
     loadUserStorageData();
   }, []);
+
+  async function signInWithApple() {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      if (credential) {
+        const userInfo = {
+          id: String(credential.user),
+          email: credential.email!,
+          name: credential.fullName!.givenName,
+          photo: `https://ui-avatars.com/api/?name=${
+            credential.fullName!.givenName
+          }&length=1`,
+        };
+
+        setUser(userInfo);
+        await AsyncStorage.setItem(userStorageKey, JSON.stringify(userInfo));
+      }
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
 
   async function signInWithGoogle() {
     try {

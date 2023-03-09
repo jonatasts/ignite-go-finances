@@ -36,7 +36,15 @@ export const Signin = () => {
     }
   }
 
-  async function handleSignInWithApple() {}
+  async function handleSignInWithApple() {
+    setIsLoading(true);
+    try {
+      await signInWithApple();
+    } catch (error) {
+      Alert.alert("Não foi possível conectar a conta Google");
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Container>
