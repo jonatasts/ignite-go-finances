@@ -27,8 +27,8 @@ interface AuthContextProps {
 }
 
 const userStorageKey = "@gofinances:user";
-const CLIENT_ID = process.env;
-const REDIRECT_URI = process.env;
+const { CLIENT_ID } = process.env;
+const { REDIRECT_URI } = process.env;
 const AuthContext = createContext({} as AuthContextProps);
 
 function AuthContextProvider({ children }: AuthProviderProps) {
