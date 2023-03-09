@@ -20,13 +20,14 @@ import {
   FooterWrapper,
 } from "./styles";
 
-export const Signin = () => {
+export const SignIn = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { signInWithGoogle, signInWithApple } = useAuthContext();
   const theme = useTheme();
 
   async function handleSignInWithGoogle() {
     setIsLoading(true);
+    
     try {
       await signInWithGoogle();
       setIsLoading(false);
@@ -38,8 +39,10 @@ export const Signin = () => {
 
   async function handleSignInWithApple() {
     setIsLoading(true);
+
     try {
       await signInWithApple();
+      setIsLoading(false);
     } catch (error) {
       Alert.alert("Não foi possível conectar a conta Google");
       setIsLoading(false);

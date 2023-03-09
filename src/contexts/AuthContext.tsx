@@ -42,12 +42,15 @@ function AuthContextProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     async function loadUserStorageData() {
       const userStorageData = await AsyncStorage.getItem(userStorageKey);
+
       if (userStorageData) {
         const userInfo = JSON.parse(userStorageData) as User;
         setUser(userInfo);
       }
+
       setIsUserStorageLoading(false);
     }
+
     loadUserStorageData();
   }, []);
 
@@ -59,6 +62,7 @@ function AuthContextProvider({ children }: AuthProviderProps) {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
+      
       if (credential) {
         const userInfo = {
           id: String(credential.user),

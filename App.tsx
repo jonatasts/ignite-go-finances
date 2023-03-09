@@ -16,12 +16,11 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
 import moment from "moment";
 
 import theme from "./src/global/styles/theme";
 
-import { AppRoutes } from "./src/routes/app.routes";
+import { Routes } from "./src/routes";
 
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 
@@ -35,18 +34,22 @@ export default function App() {
   moment.locale("pt-br");
 
   if (!fontsLoaded) {
+    //TODO: show splash screen
+
     return <></>;
   }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <NavigationContainer>
-          <StatusBar backgroundColor={theme.colors.primary} />
-          <AuthContextProvider>
-            <AppRoutes />
-          </AuthContextProvider>
-        </NavigationContainer>
+        <StatusBar
+          backgroundColor={theme.colors.primary}
+          barStyle="light-content"
+        />
+
+        <AuthContextProvider>
+          <Routes />
+        </AuthContextProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );
