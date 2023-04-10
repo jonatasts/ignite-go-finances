@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import * as AuthSession from "expo-auth-session";
 import * as AppleAuthentication from "expo-apple-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { makeRedirectUri } from "expo-auth-session";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -32,6 +33,12 @@ interface AuthContextProps {
 const userStorageKey = "@gofinances:user";
 const { CLIENT_ID } = process.env;
 const { REDIRECT_URI } = process.env;
+
+const APP_REDIRECT_URI = makeRedirectUri({
+  scheme: REDIRECT_URI,
+  useProxy: true,
+});
+
 const AuthContext = createContext({} as AuthContextProps);
 
 function AuthContextProvider({ children }: AuthProviderProps) {
@@ -62,7 +69,7 @@ function AuthContextProvider({ children }: AuthProviderProps) {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-      
+
       if (credential) {
         const userInfo = {
           id: String(credential.user),
@@ -85,7 +92,13 @@ function AuthContextProvider({ children }: AuthProviderProps) {
     try {
       const RESPONSE_TYPE = "token";
       const SCOPE = encodeURI("profile email");
-      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
+
+      const authUrl =
+        "https://accounts.google.com/o/oauth2/v2/auth" +
+        `?client_id=${CLIENT_ID}` +
+        `&redirect_uri=${APP_REDIRECT_URI}` +
+        `&response_type=${RESPONSE_TYPE}` +
+        `&scope=${SCOPE}`;
 
       const { type, params } = (await AuthSession.startAsync({
         authUrl,
