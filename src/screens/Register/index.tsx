@@ -150,6 +150,7 @@ export const Register = () => {
             </TransactionsContainer>
 
             <CategorySelectButton
+              testID="category-button"
               category={category}
               onPress={() => setCategoryModalOpen(true)}
             />
@@ -158,7 +159,11 @@ export const Register = () => {
           <Button onPress={handleSubmit(handleRegister)} title="Salvar" />
         </Form>
 
-        <Modal animationType="slide" visible={categoryModalOpen}>
+        <Modal
+          testID="modal-category"
+          animationType="slide"
+          visible={categoryModalOpen}
+        >
           <CategorySelect
             category={category}
             setCategory={setCategory}
