@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { TextInput } from "react-native";
 import MaskInput from "react-native-mask-input";
 import { RFValue } from "react-native-responsive-fontsize";
 import { css } from "styled-components";
