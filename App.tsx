@@ -17,12 +17,15 @@ import {
 } from "@expo-google-fonts/poppins";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import moment from "moment";
+import * as SplashScreen from "expo-splash-screen";
 
 import theme from "./src/global/styles/theme";
 
 import { Routes } from "./src/routes";
 
 import { AuthContextProvider } from "./src/contexts/AuthContext";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
