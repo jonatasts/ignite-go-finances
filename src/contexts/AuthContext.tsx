@@ -37,7 +37,6 @@ const { REDIRECT_URI } = process.env;
 const APP_REDIRECT_URI = makeRedirectUri({
   scheme: REDIRECT_URI,
   useProxy: true,
-  projectNameForProxy: "gofinances",
 });
 
 const AuthContext = createContext({} as AuthContextProps);
