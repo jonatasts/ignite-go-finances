@@ -4,6 +4,25 @@
     "slug": "gofinances",
     "scheme": "gofinances",
     "version": "1.0.0",
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "splash": {
+      "image": "./resources/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#5636D3"
+    },
+    "icon": "./resources/icon.png",
+    "extra": {
+      "eas": {
+        "projectId": "cb561817-babc-4505-96eb-4e78af2d5820"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/cb561817-babc-4505-96eb-4e78af2d5820"
+    },
+    "android": {},
+    "ios": {}
   }
 }
